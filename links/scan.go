@@ -8,6 +8,7 @@ import (
 	"path"
 	"regexp"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
@@ -97,6 +98,9 @@ func GetAllURL(pathname string) {
 	sc := bufio.NewScanner(f)
 	for sc.Scan() {
 		line++
+		if strings.Contains(sc.Text(), "{{<") {
+			continue
+		}
 		lk := reg.FindString(sc.Text())
 		if lk != "" {
 			link[pathname+":"+strconv.Itoa(line)] = lk[1:]

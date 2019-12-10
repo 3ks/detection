@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -19,16 +20,28 @@ func main() {
 	// 加载解析 old.md
 	old := LoadOld()
 
-	count := 1
-	data := bytes.Buffer{}
+	count := 0
+	data := make([]string, len(m404))
 	for k, v := range m404 {
 		if !old[k] {
-			data.WriteString(strconv.Itoa(count) + "." + v + "\n")
+			data[count] = v + "\n"
 			count++
 		}
 	}
+	data = data[:count]
+	sort.Slice(data, func(i, j int) bool {
+		return data[i] > data[j]
+	})
+
+	count = 0
+	dataOrder := bytes.Buffer{}
+	for _, v := range data {
+		dataOrder.WriteString(strconv.Itoa(count+1) + "." + v)
+		count++
+	}
+
 	_ = os.Mkdir("result", os.ModeDir)
-	_ = ioutil.WriteFile("result/new.md", data.Bytes(), 0644)
+	_ = ioutil.WriteFile("result/new.md", dataOrder.Bytes(), 0644)
 }
 
 func Load404() (m404 map[string]string) {

@@ -27,9 +27,9 @@ type Out struct {
 }
 
 func (r Out) OutPut() {
-	_ = os.Mkdir("content", os.ModeDir)
-	_ = ioutil.WriteFile("ok.md", r.ok.Bytes(), 0644)
-	_ = ioutil.WriteFile("err.md", r.errs.Bytes(), 0644)
+	_ = os.Mkdir("result", os.ModeDir)
+	_ = ioutil.WriteFile("result/ok.md", r.ok.Bytes(), 0644)
+	_ = ioutil.WriteFile("result/err.md", r.errs.Bytes(), 0644)
 
 	// 404
 	data := bytes.Buffer{}
@@ -37,7 +37,7 @@ func (r Out) OutPut() {
 	for _, v := range s404s {
 		data.WriteString(v + "\n")
 	}
-	_ = ioutil.WriteFile("source.md", data.Bytes(), 0644)
+	_ = ioutil.WriteFile("result/source.md", data.Bytes(), 0644)
 
 	// other
 	data.Reset()
@@ -46,7 +46,7 @@ func (r Out) OutPut() {
 	data.WriteString(r.code403.String())
 	data.WriteString(r.code500.String())
 	data.WriteString(r.codeOther.String())
-	_ = ioutil.WriteFile("fails.md", data.Bytes(), 0644)
+	_ = ioutil.WriteFile("result/fails.md", data.Bytes(), 0644)
 }
 
 var (
